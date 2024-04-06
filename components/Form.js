@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet } from 'react-native';
 import TrueFalseSlider from './TrueFalseSlider';
 import uuid from 'react-native-uuid';
+import propTypes from 'prop-types';
 
 const Form = ({ onAddStudent }) => {
   const [name, setName] = useState('');
@@ -63,6 +64,10 @@ const Form = ({ onAddStudent }) => {
       <Button title="Submit" onPress={handleAddStudent} />
     </View>
   );
+};
+
+Form.propTypes = {
+  onAddStudent: propTypes.func
 };
 
 const styles = StyleSheet.create({

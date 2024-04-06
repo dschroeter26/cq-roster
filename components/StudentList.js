@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, View, Text, StyleSheet } from 'react-native';
 import { DataTable } from 'react-native-paper';
 
-const StudentList = ({ students, onSignInStudent }) => {
+const StudentList = ({ studentList, onSignInStudent }) => {
 
   return (
     <DataTable>
@@ -16,8 +16,8 @@ const StudentList = ({ students, onSignInStudent }) => {
         <DataTable.Title>Time In</DataTable.Title>
       </DataTable.Header>
 
-      {students.map((student, index) => (
-      <DataTable.Row key={index}>
+      {studentList?.map((student, index) => (
+      <DataTable.Row key={student.id}>
         <DataTable.Cell>
           {student.name}
         </DataTable.Cell>
@@ -39,7 +39,7 @@ const StudentList = ({ students, onSignInStudent }) => {
           {student.destination}
         </DataTable.Cell>
         {
-          student.signInDate === null 
+          student?.signInDate === null 
           ? <Button title="Sign In" onPress={onSignInStudent(student.id)} /> 
           : <Text>{student.signInDate.toISOString()}</Text>
         }
