@@ -1,38 +1,21 @@
-import React, { useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import Form from './components/Form';
-import StudentList from './components/StudentList';
+import SignOutForm from './components/SignOutForm';
+import StudentTable from './components/StudentTable';
+
+export const StudentListContext = createContext(null);
 
 const App = () => {
-  const [students, setStudents] = useState([]);
-
-  const handleAddStudent = (student) => {
-    setStudents([...students, student]);
-  };
-
-  const handleSignInStudent = (signInStudentId) => {
-    setStudents(students?.map(student => {
-      if (student.id === signInStudentId) {
-        return {...student, signInDate: new Date()}
-      } else {
-        return student;
-      }
-    }));
-  };
+  const [studentList, setStudentList] = useState([]);
 
   return (
-    <View style={styles.container}>
-      <Form onAddStudent={handleAddStudent} />
-      <Text>Signed Out</Text>
-      <StudentList
-        students={students?.filter((student) => student.signInDate === null)} 
-        onSignInStudent={handleSignInStudent}
-      />
-      {/* <Text>Signed In</Text> */}
-      {/* <StudentList 
-        students={students.filter((student) => student.signInDate !== null)}
-      /> */}
-    </View>
+    <StudentListContext.Provider value={{studentList, setStudentList}}>
+      <View style={styles.container}>
+        <SignOutForm />
+        <Text>Students</Text>
+        <StudentTable />
+      </View>
+    </StudentListContext.Provider>
   );
 };
 

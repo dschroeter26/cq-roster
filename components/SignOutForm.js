@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, TextInput, Button, StyleSheet } from 'react-native';
 import TrueFalseSlider from './TrueFalseSlider';
 import uuid from 'react-native-uuid';
 import propTypes from 'prop-types';
+import { StudentListContext } from '../App';
 
-const Form = ({ onAddStudent }) => {
+const SignOutForm = ( ) => {
+  const {studentList, setStudentList} = useContext(StudentListContext);
+
   const [name, setName] = useState('');
   const [phase, setPhase] = useState('');
   const [roomNumber, setRoomNumber] = useState('');
   const [onBase, setOnBase] = useState(true); // Default to true
   const [destination, setDestination] = useState('');
   
-  const handleAddStudent = () => {
+  const handleSignOutStudent = () => {
     const student = {
       id: uuid.v1(),
       name,
@@ -22,7 +25,7 @@ const Form = ({ onAddStudent }) => {
       signOutDate: new Date(),
       signInDate: null
     };
-    onAddStudent(student);
+    setStudentList([...studentList, student]);
     // Clear form fields after adding student
     setName('');
     setPhase('');
@@ -61,13 +64,9 @@ const Form = ({ onAddStudent }) => {
         value={destination}
         onChangeText={text => setDestination(text)}
       />
-      <Button title="Submit" onPress={handleAddStudent} />
+      <Button title="Submit" onPress={handleSignOutStudent} />
     </View>
   );
-};
-
-Form.propTypes = {
-  onAddStudent: propTypes.func
 };
 
 const styles = StyleSheet.create({
@@ -87,4 +86,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Form;
+export default SignOutForm;
