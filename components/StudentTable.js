@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, View, Text, StyleSheet } from 'react-native';
+import { Alert, Button, View, Text, StyleSheet } from 'react-native';
 import { DataTable, Provider as PaperProvider } from 'react-native-paper';
-import propTypes from 'prop-types';
 import { StudentListContext } from '../App';
 
 const StudentTable = () => {
@@ -13,12 +12,12 @@ const StudentTable = () => {
     numberOfItemsPerPageList[0]
   );
 
-  const from = pageNumber * itemsPerPage;
-  const to = Math.min((pageNumber + 1) * itemsPerPage, studentList.length);
-
-  React.useEffect(() => {
+  useEffect(() => {
     setPageNumber(0);
   }, [itemsPerPage]);
+
+  const from = pageNumber * itemsPerPage;
+  const to = Math.min((pageNumber + 1) * itemsPerPage, studentList.length);
 
   const handleSignInStudent = (signInStudentId) => {
     const updatedStudents = studentList?.map(student => {
@@ -29,6 +28,26 @@ const StudentTable = () => {
       }
     });
     setStudentList(updatedStudents);
+  };
+
+  const showConfirmationDialogue = (student) => {
+    console.log(`IN ALERT FOR ${student.name}`);
+    return alert(
+      "Are your sure?",
+      `Sign in ${student.name}?`,
+      [
+        // The "Yes" button
+        {
+          text: "Yes",
+          onPress: () => handleSignInStudent(student.id),
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+        },
+      ]
+    );
   };
 
   return (

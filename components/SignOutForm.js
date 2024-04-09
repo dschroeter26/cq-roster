@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, TextInput, Button, StyleSheet } from 'react-native';
 import TrueFalseSlider from './TrueFalseSlider';
 import uuid from 'react-native-uuid';
@@ -14,6 +14,8 @@ const SignOutForm = ( ) => {
   const [destination, setDestination] = useState('');
   const [isFormValid, setIsFormValid] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+
+  useEffect(() => validateForm(), [name, phase, roomNumber, onBase, destination]);
 
   const validateForm = () => {
     const errors = {};
@@ -70,7 +72,6 @@ const SignOutForm = ( ) => {
         placeholder="Name"
         value={name}
         onChangeText={text => setName(text)}
-        onChange={() => validateForm()}
         onBlur={() => validateForm()}
       />
       <TextInput
@@ -78,7 +79,6 @@ const SignOutForm = ( ) => {
         placeholder="Phase"
         value={phase}
         onChangeText={text => setPhase(text)}
-        onChange={() => validateForm()}
         onBlur={() => validateForm()}
       />
       <TextInput
@@ -86,7 +86,6 @@ const SignOutForm = ( ) => {
         placeholder="Room Number"
         value={roomNumber}
         onChangeText={text => setRoomNumber(text)}
-        onChange={() => validateForm()}
         onBlur={() => validateForm()}
       />
       <TrueFalseSlider
@@ -98,7 +97,6 @@ const SignOutForm = ( ) => {
         placeholder="Destination"
         value={destination}
         onChangeText={text => setDestination(text)}
-        onChange={() => validateForm()}
         onBlur={() => validateForm()}
       />
       <Button
