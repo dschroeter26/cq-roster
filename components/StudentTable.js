@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Alert, Button, View, Text, StyleSheet } from 'react-native';
 import { DataTable, Provider as PaperProvider } from 'react-native-paper';
 import { StudentListContext } from '../App';
+import { formatDate } from '../Utils/DateUtils';
 
 const StudentTable = () => {
   const { studentList, setStudentList } = useContext(StudentListContext);
@@ -33,17 +34,17 @@ const StudentTable = () => {
   const showConfirmationDialogue = (signInStudent) => {
     return Alert.alert(
       "Are your sure?",
-      `Sign in ${signInStudent.name}?`,
+      `Sign in ${signInStudent.name} from ${signInStudent.destination}?`,
       [
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "Cancel",
+        },
         // The "Yes" button
         {
           text: "Yes",
           onPress: () => handleSignInStudent(signInStudent.id),
-        },
-        // The "No" button
-        // Does nothing but dismiss the dialog when tapped
-        {
-          text: "No",
         },
       ]
     );
@@ -70,7 +71,7 @@ const StudentTable = () => {
         <DataTable.Cell>
           {
             student.signOutDate !== null && student.signOutDate.toLocaleDateString() + " " 
-            + student.signOutDate.toLocaleTimeString()
+            + student.signOutDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
           }
         </DataTable.Cell>
         <DataTable.Cell>
@@ -89,7 +90,7 @@ const StudentTable = () => {
           student?.signInDate === null
           ? <Button title="Sign In" onPress={() => showConfirmationDialogue({...student})} /> 
           : <DataTable.Cell>{student.signInDate.toLocaleDateString() + " " 
-            + student.signInDate.toLocaleTimeString()}</DataTable.Cell>
+            + student.signInDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</DataTable.Cell>
         }
       </DataTable.Row>
       ))}
