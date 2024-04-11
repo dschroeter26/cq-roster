@@ -5,7 +5,7 @@ import { StudentListContext } from '../App';
 
 const StudentTable = () => {
   const { studentList, setStudentList } = useContext(StudentListContext);
-
+  const [signInStudent, setSignInStudent] = useState(null);
   const [pageNumber, setPageNumber] = useState(0);
   const [numberOfItemsPerPageList] = useState([10, 20, 30]);
   const [itemsPerPage, onItemsPerPageChange] = useState(
@@ -16,30 +16,48 @@ const StudentTable = () => {
     setPageNumber(0);
   }, [itemsPerPage]);
 
+  useEffect(() => {
+    if(signInStudent) {
+      showConfirmationDialogue();
+    }
+  }, [signInStudent]);
+
   const from = pageNumber * itemsPerPage;
   const to = Math.min((pageNumber + 1) * itemsPerPage, studentList.length);
 
-  const handleSignInStudent = (signInStudentId) => {
+  const handleSignInStudent = () => {
     const updatedStudents = studentList?.map(student => {
-      if (student.id === signInStudentId) {
+      if (student.id === signInStudent.id) {
         return {...student, signInDate: new Date()}
       } else {
         return student;
       }
     });
     setStudentList(updatedStudents);
+    setSignInStudent(null);
   };
 
-  const showConfirmationDialogue = (student) => {
-    console.log(`IN ALERT FOR ${student.name}`);
+  // const handleSignInStudent = (signInStudentId) => {
+  //   const updatedStudents = studentList?.map(student => {
+  //     if (student.id === signInStudentId) {
+  //       return {...student, signInDate: new Date()}
+  //     } else {
+  //       return student;
+  //     }
+  //   });
+  //   setStudentList(updatedStudents);
+  // };
+
+  const showConfirmationDialogue = () => {
+    // console.log(`IN ALERT FOR ${student.name}`);
     return alert(
       "Are your sure?",
-      `Sign in ${student.name}?`,
+      `Sign in ${signInStudent.name}?`,
       [
         // The "Yes" button
         {
           text: "Yes",
-          onPress: () => handleSignInStudent(student.id),
+          onPress: () => handleSignInStudent(),
         },
         // The "No" button
         // Does nothing but dismiss the dialog when tapped
@@ -88,7 +106,7 @@ const StudentTable = () => {
         </DataTable.Cell>
         {
           student?.signInDate === null
-          ? <Button title="Sign In" onPress={() => handleSignInStudent(student.id)} /> 
+          ? <Button title="Sign In" onPress={() => setSignInStudent({...student})} /> 
           : <DataTable.Cell>{student.signInDate.toLocaleDateString() + " " 
             + student.signInDate.toLocaleTimeString()}</DataTable.Cell>
         }
